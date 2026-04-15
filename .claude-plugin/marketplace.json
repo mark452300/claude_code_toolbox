@@ -1,0 +1,27 @@
+{
+  "name": "claude-code-toolbox",
+  "displayName": "Claude Code ToolBox",
+  "description": "The most comprehensive toolbox for Claude Code -- 1 agents, 1 skills, 1 commands, 1 plugins, 1 hooks, 11 rules, 1 templates, and 1 MCP configs.",
+  "owner": { "name": "lemon Alpha" },
+  "repository": "https://github.com/mark452300/claude_code_toolbox",
+  "license": "Apache-2.0",
+  "version": "1.0.0",
+  "categories": [
+    "plugins",
+    "agents",
+    "skills",
+    "commands",
+    "hooks",
+    "rules",
+    "templates",
+    "contexts"
+  ],
+  "plugins": [
+    {
+      "name": "a11y-audit",
+      "source": "plugins/a11y-audit",
+      "description": "Full accessibility audit with WCAG compliance checking",
+      "version": "1.0.0"
+    }
+  ]
+}
