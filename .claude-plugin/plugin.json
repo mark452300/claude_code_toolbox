@@ -1,7 +1,9 @@
 {
-  "name": "claude-code-toolbox",
-  "version": "1.0.0",
-  "description": "Complete developer toolbox for Claude Code",
-  "author": "lemon Alpha",
-  "license": "Apache-2.0"
+    "name": "claude-code-toolbox",
+    "version": "1.0.0",
+    "description": "Complete developer toolbox for Claude Code",
+    "author": {
+        "name": "lemon Alpha"
+    },
+    "license": "Apache-2.0"
 }
