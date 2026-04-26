@@ -23,4 +23,7 @@ yarn.lock
 .cache/
 tmp/
 temp/
-.claude
+
+settings.local.json
+.serena
+

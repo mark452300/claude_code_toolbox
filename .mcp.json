@@ -11,8 +11,8 @@
                 "MYSQL_HOST": "localhost",
                 "MYSQL_PORT": "3306",
                 "MYSQL_USER": "root",
-                "MYSQL_PASSWORD": "",
-                "MYSQL_DATABASE": ""
+                "MYSQL_PASSWORD": "your password ",
+                "MYSQL_DATABASE": "your DATABASE name "
             }
         },
         "context7": {
@@ -21,13 +21,23 @@
                 "-y",
                 "@upstash/context7-mcp",
                 "--api-key",
-                "your-api-key"
+                "your-api-key write here https://context7.com/dashboard"
             ]
         },
         "playwright": {
             "command": "npx",
             "args": [
                 "@playwright/mcp@latest"
+            ]
+        },
+        "serena": {
+            "command": "serena",
+            "args": [
+                "start-mcp-server",
+                "--context",
+                "claude-code",
+                "--project",
+                "your-project-workspace write here for example: D:\\code\\GitHub\\claude_code_toolbox "
             ]
         }
     }
