@@ -23,3 +23,4 @@ yarn.lock
 .cache/
 tmp/
 temp/
+.claude
