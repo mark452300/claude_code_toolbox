@@ -39,6 +39,14 @@
                 "--project",
                 "your-project-workspace write here for example: D:\\code\\GitHub\\claude_code_toolbox "
             ]
+        },
+        "codegraph": {
+            "type": "stdio",
+            "command": "codegraph",
+            "args": [
+                "serve",
+                "--mcp"
+            ]
         }
     }
 }
