@@ -1,7 +1,7 @@
 {
   "name": "claude-code-toolbox",
   "displayName": "Claude Code ToolBox",
-  "description": "The most comprehensive toolbox for Claude Code -- 1 agents, 1 skills, 1 commands, 1 plugins, 1 hooks, 11 rules, 1 templates, and 1 MCP configs.",
+  "description": "The most comprehensive toolbox for Claude Code -- 1 agent, 2 skills, and 1 rule for enhanced productivity.",
   "owner": { "name": "lemon Alpha" },
   "repository": "https://github.com/mark452300/claude_code_toolbox",
   "license": "Apache-2.0",
@@ -16,11 +16,27 @@
     "templates",
     "contexts"
   ],
-  "plugins": [
+  "agents": [
+  ],
+  "skills": [
     {
-      "name": "a11y-audit",
-      "source": "plugins/a11y-audit",
-      "description": "Full accessibility audit with WCAG compliance checking",
+      "name": "frontend-design",
+      "source": "skills/frontend-design",
+      "description": "Frontend design patterns and best practices",
+      "version": "1.0.0"
+    },
+    {
+      "name": "karpathy-guidelines",
+      "source": "skills/karpathy-guidelines",
+      "description": "Karpathy's coding guidelines and principles",
+      "version": "1.0.0"
+    }
+  ],
+  "rules": [
+    {
+      "name": "mcp-tools",
+      "source": "rules/mcp-tools.md",
+      "description": "Guidelines for using MCP tools effectively",
       "version": "1.0.0"
     }
   ]
