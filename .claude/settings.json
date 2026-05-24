@@ -1,5 +1,5 @@
 {
-    "skipDangerousModePermissionPrompt": true,  //获取编辑的最高权限，不需要一次次的点击授权功能
+
     "enabledPlugins": {
         "claude-mem@thedotmack": true
     },
@@ -46,6 +46,14 @@
                     }
                 ]
             }
+        ]
+    },
+    "permissions": {
+        "defaultMode": "acceptEdits",
+        "allow": [
+            "mcp__codegraph__*",
+            "Bash(*)",
+            "WebFetch(*)"
         ]
     }
 }
