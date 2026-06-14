@@ -7,7 +7,7 @@
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE.txt)
 [![Version](https://img.shields.io/badge/version-1.0.0-green.svg)](.claude-plugin/plugin.json)
 
-一站式 Claude Code 开发工具集合，包含 MCP 服务器配置、自定义 Agents、编码技能、规则模板等。
+一站式 Claude Code 配置工具箱，包含项目级 `.claude` 配置、MCP 服务器配置，以及用于同步这些配置的安装脚本。
 
 [English](#english) | [中文](#chinese)
 
@@ -29,35 +29,104 @@
 git clone https://github.com/mark452300/claude_code_toolbox.git
 ```
 
+### 方式三：使用 `install.sh` 同步到当前项目
+
+`install.sh` 适合在你的业务项目目录中执行，用来把本仓库提供的 `.claude/` 和 `.mcp.json` 同步到当前项目。
+
+执行前请确认本机已安装：
+
+- `git`
+- `bash`
+
+使用方式：
+
+```bash
+bash /path/to/claude_code_toolbox/install.sh
+```
+
+如果你当前就在本仓库目录，也可以这样执行：
+
+```bash
+bash install.sh
+```
+
+脚本会执行以下操作：
+
+- 从 GitHub 临时拉取最新的 `claude_code_toolbox`
+- 将仓库中的 `.claude/` 整体同步到当前项目
+- 将 `.mcp.json` 复制到当前项目根目录
+- 如果目标 `.claude/` 已存在，会先删除后再覆盖为最新版本
+- 如果源仓库缺少 `.claude/` 或 `.mcp.json`，脚本会输出警告
+
+示例：
+
+```bash
+cd /path/to/your-project
+bash /path/to/claude_code_toolbox/install.sh
+```
+
+执行完成后，你的项目目录通常会包含：
+
+```text
+your-project/
+├── .claude/
+│   ├── agents/
+│   ├── commands/
+│   ├── rules/
+│   ├── skills/
+│   └── settings.json
+└── .mcp.json
+```
+
+注意事项：
+
+- 请在目标项目根目录执行这个脚本，因为它会把文件写入“当前目录”
+- 脚本需要联网访问 GitHub
+- 脚本会覆盖当前项目中的 `.claude/` 和 `.mcp.json`
+
 ---
 
-## 🚀 功能特性
+## 🚀 当前内容
+
+### 📁 `.claude` 配置
+
+当前仓库主要通过 `.claude/` 提供 Claude Code 项目配置，包含：
+
+- **agents/** - Claude Code agents 目录（当前为空）
+- **commands/** - Claude Code commands 目录（当前为空）
+- **rules/** - 项目规则
+- **skills/** - Claude Code skills
+- **settings.json** - Claude Code 项目设置、hooks 与权限配置
 
 ### 🔧 MCP 服务器配置
-预配置了 4 个强大的 MCP 服务器：
 
-- **toolbox-mysql** - MySQL 数据库操作
-- **context7** - 实时文档搜索和代码示例
-- **playwright** - 浏览器自动化测试
-- **serena** - 语义代码分析和智能重构
+当前仓库提供了 5 个 MCP 服务器配置：
 
-### 🤖 自定义 Agents
-- **code-reviewer** - 专业代码审查 Agent，关注正确性和可维护性
+- **toolbox-mysql** - MySQL 数据库访问
+- **context7** - 文档检索与示例查询
+- **playwright** - 浏览器自动化
+- **serena** - 项目语义分析与记忆
+- **codegraph** - 代码图谱与索引查询
 
-### 📚 编码技能 (Skills)
-- **karpathy-guidelines** - 减少 LLM 编码错误的行为准则
+### 📚 Skills
+
+- **karpathy-guidelines** - Karpathy 编码准则
 - **frontend-design** - 前端设计最佳实践
 
-### 📋 项目规则 (Rules)
-- **API 设计规范** - 统一的 API 响应格式和验证规则
+### 📋 Rules
+
+- **mcp-tools** - MCP 工具使用约定
+- **code-for-humans** - 面向人类可读性的编码规则
+
+### 🧰 同步脚本
+
+- **`install.sh`** - 将本仓库的配置同步到你的当前项目
 
 ---
 
 ## ⚙️ 配置说明
 
-### 必需配置项
-
-安装后，需要在 `.mcp.json` 文件中配置以下参数：
+安装后，需要根据你的本地环境修改 `.mcp.json` 中的占位值。
 
 #### 1. toolbox-mysql 配置
 
@@ -77,9 +146,10 @@ git clone https://github.com/mark452300/claude_code_toolbox.git
 }
 ```
 
-**必填项：**
-- `MYSQL_PASSWORD` - 你的 MySQL 密码
-- `MYSQL_DATABASE` - 目标数据库名称
+需要至少替换：
+
+- `MYSQL_PASSWORD`
+- `MYSQL_DATABASE`
 
 #### 2. context7 配置
 
@@ -98,7 +168,9 @@ git clone https://github.com/mark452300/claude_code_toolbox.git
 }
 ```
 
-**获取 API Key：** 访问 [https://context7.com/dashboard](https://context7.com/dashboard)
+将 `your-api-key write here ...` 替换为你自己的 Context7 API Key。
+
+获取地址： [https://context7.com/dashboard](https://context7.com/dashboard)
 
 #### 3. serena 配置
 
@@ -118,30 +190,78 @@ git clone https://github.com/mark452300/claude_code_toolbox.git
 }
 ```
 
-**示例路径：** `D:\code\GitHub\claude_code_toolbox`
+将 `your-project-workspace write here ...` 替换为你的项目绝对路径。
 
-#### 4. playwright 配置
+示例路径：`D:\code\GitHub\claude_code_toolbox`
 
-无需额外配置，开箱即用。
+#### 4. codegraph 配置
+
+```json
+{
+  "mcpServers": {
+    "codegraph": {
+      "type": "stdio",
+      "command": "codegraph",
+      "args": ["serve", "--mcp"]
+    }
+  }
+}
+```
+
+要求本机已安装 `codegraph` 命令。
+
+#### 5. playwright 配置
+
+默认配置如下：
+
+```json
+{
+  "mcpServers": {
+    "playwright": {
+      "command": "npx",
+      "args": ["@playwright/mcp@latest"]
+    }
+  }
+}
+```
+
+首次使用时需要本机具备 Node.js / npm 环境。
+
+#### 6. `.claude/settings.json`
+
+仓库中还包含项目级 Claude Code 设置，主要包括：
+
+- 启用项目 MCP Server
+- `serena-hooks` 的 `SessionStart`、`PreToolUse`、`Stop` Hook
+- 对 `mcp__codegraph__*`、`mcp__serena__*`、`Bash(*)`、`WebFetch(*)` 的权限放行
+
+如果你不使用 `serena-hooks` 或 `claude-mem@thedotmack`，同步后需要按你的环境调整 `.claude/settings.json`。
 
 ---
 
-## 📁 项目结构
+## 📁 当前项目结构
 
 ```
 claude_code_toolbox/
-├── .claude-plugin/          # 插件元数据
-│   ├── plugin.json          # 插件基本信息
-│   └── marketplace.json     # 市场列表配置
+├── .claude/
+│   ├── agents/              # Claude Code agents（当前为空）
+│   ├── commands/            # Claude Code commands（当前为空）
+│   ├── rules/
+│   │   ├── mcp-tools.md
+│   │   └── code-for-humans.md
+│   ├── skills/
+│   │   ├── karpathy-guidelines/
+│   │   │   └── SKILL.md
+│   │   └── frontend-design/
+│   │       └── SKILL.md
+│   └── settings.json        # Claude Code 项目设置
+├── .claude-plugin/          # 插件市场元数据
+│   ├── plugin.json
+│   └── marketplace.json
 ├── .mcp.json                # MCP 服务器配置
-├── agents/                  # 自定义 Agents
-│   └── code-reviewer.md     # 代码审查 Agent
-├── skills/                  # 编码技能
-│   ├── karpathy-guidelines/ # Karpathy 编码准则
-│   └── frontend-design/     # 前端设计技能
-├── rules/                   # 项目规则
-│   └── example.md           # API 设计规则示例
-├── commands/                # 自定义命令（待扩展）
+├── .codegraph/              # codegraph 本地索引数据
+├── .serena/                 # serena 项目本地数据
+├── install.sh               # 配置同步脚本
 └── README.md                # 项目文档
 ```
 
@@ -149,46 +269,33 @@ claude_code_toolbox/
 
 ## 🎯 使用示例
 
-### 使用 Code Reviewer Agent
+### 使用 skill
 
 ```bash
-# 在 Claude Code 中调用
-使用 code-reviewer agent 审查我的 PR
-```
-
-### 应用 Karpathy Guidelines
-
-```bash
-# 在编写代码时
 使用 karpathy-guidelines skill 帮我重构这段代码
+使用 frontend-design skill 帮我调整这个页面
 ```
 
-### 使用 MySQL MCP 服务器
+### 使用 rule
 
 ```bash
-# 配置完成后，可以直接查询数据库
+请按 code-for-humans 规则整理这个模块
+在这次操作里遵循 mcp-tools 规则
+```
+
+### 使用 MCP
+
+```bash
 查询 users 表中的所有活跃用户
+用 context7 查一下 React Router 最新文档
+用 playwright 打开登录页并检查报错
+用 serena 分析这个仓库的模块关系
+用 codegraph 查找谁调用了这个函数
 ```
 
 ---
 
 ## 🛠️ 开发指南
-
-### 添加新的 Agent
-
-1. 在 `agents/` 目录下创建新的 `.md` 文件
-2. 使用以下模板：
-
-```markdown
----
-name: your-agent-name
-description: Agent 描述
-model: sonnet
-tools: Read, Grep, Glob
----
-
-Agent 的具体指令和行为描述...
-```
 
 ### 添加新的 Skill
 
@@ -208,6 +315,13 @@ paths:
 
 规则内容...
 ```
+
+### 更新插件元数据
+
+如果你新增了 skill 或 rule，记得同步更新：
+
+- `.claude-plugin/plugin.json`
+- `.claude-plugin/marketplace.json`
 
 ---
 

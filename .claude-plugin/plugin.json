@@ -1,7 +1,7 @@
 {
     "name": "claude-code-toolbox",
     "version": "1.0.0",
-    "description": "Complete developer toolbox for Claude Code",
+    "description": "Claude Code project config bundle with .claude settings, skills, rules, and MCP setup",
     "author": {
         "name": "lemon Alpha"
     },
