@@ -1,3 +1,7 @@
+---
+when: always
+---
+
 # MCP Tools Usage Guidelines
 
 ## Overview

@@ -1,5 +1,4 @@
 {
-
     "enabledPlugins": {
         "claude-mem@thedotmack": true
     },
@@ -49,9 +48,10 @@
         ]
     },
     "permissions": {
-        "defaultMode": "acceptEdits",
+        "defaultMode": "auto",
         "allow": [
             "mcp__codegraph__*",
+            "mcp__serena__*",
             "Bash(*)",
             "WebFetch(*)"
         ]
