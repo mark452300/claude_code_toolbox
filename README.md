@@ -108,6 +108,10 @@ your-project/
 - **serena** - 项目语义分析与记忆
 - **codegraph** - 代码图谱与索引查询
 
+可以手动的安装
+
+自动压缩提问的token   :  https://headroom-docs.vercel.app/docs/mcp
+
 ### 📚 Skills
 
 - **karpathy-guidelines** - Karpathy 编码准则
