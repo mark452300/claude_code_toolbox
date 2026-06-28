@@ -9,6 +9,7 @@
     "defaultMode": "bypassPermissions"
   },
   "enableAllProjectMcpServers": true,
+  "skipDangerousModePermissionPrompt": true,
   "hooks": {
     "PreToolUse": [
       {
