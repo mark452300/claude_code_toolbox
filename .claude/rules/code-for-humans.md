@@ -4,155 +4,120 @@ when: [writing_code, reviewing_code]
 
 # Code for Humans First
 
-> "Programs must be written for people to read, and only incidentally for machines to execute." — Harold Abelson
+> "Programs must be written for people to read, and only incidentally for machines to execute." - Harold Abelson
 
-Every design principle exists to reduce cognitive load for humans, not to please the compiler.
+Write code that is correct, easy to understand, and no larger than the task requires.
 
----
+## Priority Order
 
-## Core Principles
+When principles conflict, use this order:
 
-### 1. KISS (Keep It Simple, Stupid)
-Choose the simplest implementation. Don't over-engineer for hypothetical futures or show off with complex nested expressions.
+1. Correctness and safety
+2. The user's requested scope
+3. Existing contracts and project conventions
+4. Simplicity and readability
+5. Extensibility and optimization
 
-### 2. Empathy-Driven Programming
-Write assuming the reader is you in 6 months with zero context. Ask: "Would a stranger understand this without asking me?"
+Do not sacrifice a higher-priority goal for a lower-priority one.
 
-### 3. Clarity Over Brevity
-Use intermediate variables to name sub-expressions. Break complex conditions into named booleans. Two clear lines beat one cryptic line.
+## Required Workflow
 
-```javascript
-// Bad: if (u.age > 18 && u.status === 'active' && !u.banned && u.verified) { ... }
+### 1. Understand Before Editing
 
-// Good:
-const isAdult = user.age > 18;
-const isActiveUser = user.status === 'active' && !user.banned;
-const canAccess = isAdult && isActiveUser && user.verified;
-if (canAccess) { ... }
-```
+- Read the relevant code, tests, configuration, and nearby conventions.
+- Search for existing behavior before adding a new implementation.
+- Verify real APIs, signatures, dependencies, commands, config keys, environment variables, and file paths.
+- Check callers before changing inputs, outputs, side effects, errors, or public behavior.
+- Do not guess when the answer can be found in the codebase or authoritative documentation.
 
-### 4. Name Things Honestly
-Names reveal intent, not implementation. Functions describe *what*, not *how*. Variables describe *what they hold*, not their type.
+### 2. Make the Smallest Complete Change
 
-### 5. Self-Documenting Code
-Code explains *what*. Comments explain *why* (context, constraints, non-obvious decisions). Delete comments that restate code.
+- Change only what is needed to satisfy the request.
+- Prefer modifying the existing implementation over creating a parallel path.
+- Fix the underlying cause, not only the observed example, while keeping the change within scope.
+- Do not refactor, rename, reformat, or clean up unrelated code.
+- Preserve backward compatibility only when the project or request requires it.
+- Mention broader issues separately instead of silently expanding the task.
 
-### 6. Minimize Cognitive Load
-- Keep functions short (one screen, one responsibility)
-- Limit parameters (3-4 max; use objects for more)
-- Avoid deep nesting (use early returns, guard clauses)
-- Reduce mutable state and side effects
+### 3. Keep the Implementation Simple
 
-### 7. Make Errors Impossible
-Use types, enums, and immutability to catch mistakes at compile time, not runtime. Make invalid states unrepresentable.
+- Choose the most direct implementation that matches existing project patterns.
+- Do not design for hypothetical future requirements.
+- Add an abstraction only when it removes meaningful duplication, reduces current complexity, or follows an established local pattern.
+- Do not add speculative helpers, wrappers, factories, strategy layers, configuration systems, feature flags, fallbacks, or compatibility layers.
+- Do not add defensive checks for states already made impossible by trusted types, schemas, or validated boundaries.
+- Do not add a dependency when the project already has a suitable solution.
 
-### 8. Consistency Over Cleverness
-Follow existing codebase patterns even if you know a "better" way. Consistency reduces surprise. Refactor the whole area or don't create islands of inconsistency.
+### 4. Write for the Next Reader
 
-### 9. Delete More Than You Add
-Every line is a liability. Before adding features or dependencies, ask: "Can we solve this by removing something or writing 10 lines instead?"
+- Use names that reveal intent.
+- Keep control flow direct; prefer guard clauses and early returns when they improve clarity.
+- Split complex expressions into well-named parts.
+- Keep functions and modules focused, but do not split them merely to satisfy arbitrary size limits.
+- Keep related behavior and data together, maintain clear module boundaries, and depend on stable public contracts rather than another module's internal details.
+- Follow existing conventions instead of introducing an isolated personal style.
+- Comments explain why, constraints, or non-obvious decisions; they do not narrate the code.
+- Remove dead code, redundant variables, duplicate logic, and obsolete comments introduced or exposed by the change when doing so is clearly in scope.
 
-### 10. Optimize for Change
-Code is modified more than written. Isolate what changes from what stays the same. Use dependency injection. Keep business logic separate from framework code.
+### 5. Verify the Result
 
-### 11. Clear Module Boundaries
-Each module owns one domain. Dependencies flow in one direction. No circular imports. Public API vs internal implementation (prefix private with `_`). Ask: "If I change this module's internals, will other modules break?"
+- Run the narrowest relevant tests, type checks, lint checks, or build commands.
+- Test observable behavior rather than implementation details.
+- Cover the changed behavior and important failure paths when practical.
+- Do not weaken, delete, or rewrite tests merely to make a failing implementation pass.
+- Do not claim completion with placeholders, hardcoded results, empty implementations, or unresolved TODOs.
+- Review the diff for accidental edits, duplication, hidden behavior changes, and unnecessary code.
+- Do not claim the change works without verification.
+- If verification cannot be run, state what was not checked and why.
 
-### 12. Consistent Error Handling
-Use domain-specific exceptions, not generic `Exception`. Fail fast at boundaries (validate inputs early). Include context in error messages (what failed, why, what was expected). Never silently swallow exceptions (`except: pass` is banned).
+## Rules That Apply When Relevant
 
-### 13. Explicit Resource Ownership
-Every resource has one clear owner responsible for cleanup. Use context managers for resources (files, connections, locks). Avoid resource leaks. RAII pattern: acquire in constructor, release in destructor.
+Use these only when the task actually involves the corresponding concern.
 
-### 14. Concurrency: Explicit Synchronization
-Shared mutable state requires explicit protection. Default to immutable data. Name locks after what they protect: `user_cache_lock` not `lock1`. Document lock order to prevent deadlocks. Prefer thread-safe data structures.
+### Errors and Boundaries
 
-### 15. Configuration Over Magic Numbers
-All tunable values belong in configuration, not scattered in code. No magic numbers (timeouts, limits, thresholds). Validate config at startup. Separate: defaults → config file → env vars → CLI args.
+- Validate untrusted input at system boundaries.
+- Fail clearly and include useful context in errors.
+- Use the project's established error types and handling patterns.
+- Never silently swallow an error unless the behavior is explicitly intentional and documented.
 
-### 16. Logging: For Future Debugging
-Logs should tell a story when things go wrong. Log state transitions (started, completed, failed). Log errors with context (input, state, expected vs actual). Use appropriate levels: DEBUG, INFO, WARN, ERROR. Avoid noise in tight loops.
+### Resources and Concurrency
 
-### 17. Measure Before Optimizing
-Premature optimization is the root of all evil. Profile first, optimize second. Optimize hot paths (frequently executed). Keep cold paths simple (startup, config, rare operations). Mark hot paths with comments.
+- Give files, connections, locks, and similar resources a clear owner and cleanup path.
+- Prefer language-native resource management patterns.
+- Minimize shared mutable state and protect it with explicit synchronization when necessary.
+- Document non-obvious lock ordering or concurrency assumptions.
 
-### 18. Test Behavior, Not Implementation
-Tests should survive refactoring. Test public APIs, not private methods. Test outcomes, not internal state. One test = one behavior. Test names describe what they verify.
+### Configuration and Logging
 
-### 19. Write Elegant Code
-Elegance is simplicity refined. Elegant code is not about being clever or terse—it's about being clear, intentional, and effortless to read. Remove redundancy. Eliminate unnecessary variables. Use early returns to flatten logic. Choose the most direct path. When you finish, ask: "Could this be simpler?" If yes, simplify. Elegant code feels inevitable, like it couldn't have been written any other way.
+- Name values whose meaning would otherwise be unclear; make a value configurable only when it genuinely varies by environment or use case.
+- Validate required configuration at an appropriate boundary.
+- Log useful state transitions and failures with context.
+- Avoid secrets, sensitive data, duplicate error reporting, and noisy logs.
 
-```python
-# Not elegant: redundant variable, nested if
-def process_user(user):
-    result = validate_user(user)
-    if result:
-        status = user.get_status()
-        if status == 'active':
-            return True
-    return False
+### Performance
 
-# Elegant: direct, flat, obvious
-def process_user(user):
-    if not validate_user(user):
-        return False
-    return user.get_status() == 'active'
-```
+- Do not optimize based on speculation.
+- Measure before making non-obvious performance changes.
+- Keep ordinary code clear unless evidence shows that complexity is justified.
 
----
+### Object-Oriented Design
 
-## SOLID Principles (Object-Oriented)
+- Apply SOLID principles as heuristics, not mandatory architecture.
+- Prefer composition and focused interfaces when they simplify the current design.
+- Do not introduce interfaces, dependency injection, or extension points without a present need.
+- Preserve substitutability and existing contracts when using inheritance or polymorphism.
 
-**Note:** SOLID is for OOP but underlying ideas apply across paradigms via pure functions, immutability, and composition.
+## Final Check
 
-### S - Single Responsibility
-One class/module, one reason to change. Each does one thing well. If you describe it with "and" or "or", it's doing too much.
+Before finishing, confirm:
 
-### O - Open/Closed
-Open for extension, closed for modification. Add new code instead of modifying existing. Use abstraction (interfaces, protocols) to allow new behavior without touching old code.
+- [ ] The requested behavior is fully implemented.
+- [ ] The change stays within scope and preserves existing contracts.
+- [ ] Existing code and interfaces were reused where appropriate.
+- [ ] No speculative abstraction, compatibility code, fallback, dependency, or configuration was added.
+- [ ] Names, control flow, comments, and module boundaries are easy to understand.
+- [ ] Relevant verification passed, or missing verification is clearly reported.
+- [ ] The final diff contains no accidental or unnecessary changes.
 
-### L - Liskov Substitution
-Subtypes must be substitutable for base types without breaking correctness. Child classes strengthen, not weaken, parent contracts.
-
-### I - Interface Segregation
-Many small, focused interfaces beat one bloated interface. Clients shouldn't depend on methods they don't use.
-
-### D - Dependency Inversion
-High-level modules shouldn't depend on low-level modules. Both depend on abstractions. Inject dependencies instead of hardcoding.
-
-**SOLID Summary:**
-
-| Principle | Core Idea | Benefit |
-|-----------|-----------|---------|
-| **S**ingle Responsibility | One reason to change | Easier to understand/modify |
-| **O**pen/Closed | Extend, don't modify | Safer changes, less regression |
-| **L**iskov Substitution | Honor parent contracts | Polymorphism works correctly |
-| **I**nterface Segregation | Small, focused interfaces | No unused dependencies |
-| **D**ependency Inversion | Depend on abstractions | Flexible, testable, decoupled |
-
----
-
-## Readability Checklist
-
-Before committing:
-- [ ] Can someone understand this without asking me?
-- [ ] Are names honest and descriptive?
-- [ ] Is the simplest approach used?
-- [ ] Is the intent obvious?
-- [ ] Are complex expressions broken into named parts?
-- [ ] Are comments explaining *why*, not *what*?
-- [ ] Is nesting minimized?
-- [ ] Does it follow the project's existing patterns?
-- [ ] Could I delete anything without losing clarity?
-- [ ] Will this be easy to change later?
-- [ ] Are module boundaries clear with no circular dependencies?
-- [ ] Do errors include context and use domain-specific exceptions?
-- [ ] Are resources properly managed (context managers, cleanup)?
-- [ ] Is shared state protected with explicit synchronization?
-- [ ] Are magic numbers replaced with named config values?
-- [ ] Do tests verify behavior, not implementation details?
-- [ ] Is the code elegant—simple, direct, and effortless to read?
-
----
-
-**Final Thought:** You're writing for the next human — who might be you at 2 AM fixing a production bug. Be kind to that person.
+Write for the next human, who may be debugging this code with no context.

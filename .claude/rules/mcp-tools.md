@@ -1,121 +1,104 @@
 ---
-when: always
+when: [writing_code, reviewing_code, using_mcp_tools]
 ---
 
-# MCP Tools Usage Guidelines
+# MCP Tool Usage
 
-## Overview
-This document provides guidelines for using MCP (Model Context Protocol) tools effectively in any project.
+Use tools to reduce uncertainty and verify results. Choose the smallest set of available tools that can complete the task reliably.
 
-### 1. codegraph - Primary Code Intelligence Tool
-**When to use:**
-- Understanding code structure and architecture
-- Finding symbol definitions (components, functions, types)
-- Analyzing call relationships and dependencies
-- Exploring "how does X work" questions
-- Getting quick overview of files and symbols
+## Core Rules
 
-**Workflow:**
-- Start with `codegraph_context` for comprehensive understanding
-- Use `codegraph_explore` to view related symbols' source code
-- Use `codegraph_search` for quick symbol lookup
-- Use `codegraph_files` to explore project structure
+1. Match the tool to the task; do not follow a fixed tool sequence.
+2. Check that a tool is available before relying on it.
+3. Use repository evidence and tool output instead of guessing.
+4. Treat indexes, symbol graphs, documentation caches, and browser state as potentially incomplete or stale.
+5. Confirm important findings against source files, current configuration, tests, or authoritative documentation.
+6. If a preferred tool is unavailable or fails, use the simplest reliable fallback and continue.
+7. Do not call tools that add no useful information to the current task.
+8. Do not claim that a tool was used or that a result was verified when it was not.
 
-**Priority:** Use FIRST for any code exploration or understanding tasks.
+## Tool Selection
 
-### 2. serena - Semantic Code Editing Tool
-**When to use:**
-- Renaming symbols across the entire codebase
-- Replacing function/method bodies
-- Inserting code before/after symbols
-- Finding all references to a symbol
-- Safe deletion (checks for references first)
+### Codegraph: Code Relationships
 
-**Workflow:**
-- Use `get_symbols_overview` to understand file structure
-- Use `find_symbol` to locate specific symbols
-- Use `replace_symbol_body` for precise edits
-- Use `rename_symbol` for refactoring
-- Use `find_referencing_symbols` to check impact
+Use codegraph when it is available and the task requires:
 
-**Priority:** Use for PRECISE code modifications and refactoring.
+- Understanding architecture or cross-file relationships
+- Finding symbol definitions, callers, references, or dependencies
+- Estimating the impact of a change
+- Getting an initial map of an unfamiliar area
 
-### 3. context7 - Documentation Retrieval
-**When to use:**
-- Looking up framework and library documentation
-- Checking component usage and API references
-- Verifying patterns and best practices
-- Learning about dependencies and their features
+Confirm critical results in the source code. Use repository search and direct file reads when the index is missing, stale, incomplete, or unnecessary for a small task.
 
-**Fallback strategy:**
-- If context7 cannot find the documentation (library not indexed or query fails)
-- Use playwright to navigate to the official documentation website
-- Extract the relevant information directly from the web page
+### Serena: Semantic Code Operations
 
-**Priority:** Use when implementation details are unclear or need current docs.
+Use Serena when it is available and semantic precision is useful for:
 
-### 4. playwright - Browser Automation & Testing
-**When to use:**
-- Creating E2E tests for pages
-- Testing user interactions
-- Validating UI behavior
-- Taking screenshots for verification
-- Debugging frontend issues in real browser
+- Renaming a symbol across the codebase
+- Finding references before changing or deleting a symbol
+- Replacing a complete function, method, class, or other symbol body
+- Inserting code at a stable symbol boundary
 
-**Priority:** Use for testing and browser-based validation.
+Inspect the resulting diff after every semantic edit. Use a normal patch for small local edits, configuration, prose, generated files, or changes that do not align with symbol boundaries.
 
-## Code Modification Workflow
+Reference lookup reduces risk but does not prove that deletion or behavior changes are safe. Also check dynamic references, reflection, configuration, templates, generated code, and external contracts when relevant.
 
-1. **Understand First** (codegraph)
-   - Use `codegraph_context` to understand the feature/area
-   - Use `codegraph_explore` to see related code
+### Context7: Library Documentation
 
-2. **Plan Changes** (serena)
-   - Use `get_symbols_overview` to see file structure
-   - Use `find_symbol` to locate exact symbols to modify
+Use Context7 when it is available and current framework or library behavior is unclear.
 
-3. **Execute Changes** (serena)
-   - Use `replace_symbol_body` for function changes
-   - Use `insert_before_symbol` / `insert_after_symbol` for additions
-   - Use `rename_symbol` for refactoring
+- Prefer documentation matching the dependency version used by the project.
+- Verify signatures, configuration, migration guidance, and version-specific behavior.
+- Prefer official or primary documentation for consequential decisions.
 
-4. **Verify** (playwright if UI changes)
-   - Run dev server and test in browser
-   - Create E2E tests for critical flows
+If documentation is unavailable or incomplete, inspect local types and package sources, then consult the official documentation with an available web or browser tool. Do not invent APIs or infer current behavior from memory alone.
 
-## Tool Selection Decision Tree
+### Playwright: Browser Verification
 
-```
-Need to understand code?
-  └─> Use codegraph_context first
+Use Playwright when browser behavior matters, including:
 
-Need to modify code?
-  └─> Use serena (find_symbol → replace_symbol_body)
+- Verifying user interactions and critical UI flows
+- Reproducing browser-specific issues
+- Checking layout at relevant viewport sizes
+- Inspecting console errors and failed network requests
+- Capturing screenshots when visual evidence is useful
 
-Need library documentation?
-  └─> Use context7
+Do not use browser automation when a focused unit, integration, or component test provides sufficient evidence. Reuse the project's existing test setup and avoid adding E2E tests for trivial behavior.
 
-Need to test UI?
-  └─> Use playwright
+## Working Process
 
-Need to explore file structure?
-  └─> Use codegraph_files
+### 1. Discover
 
-Need to see who calls a function?
-  └─> Use codegraph_callers
+- Start with the cheapest reliable source of evidence: targeted search, direct file reading, symbol lookup, or documentation lookup.
+- Read enough surrounding context to understand imports, state, error handling, and local conventions.
+- Use full-file reads when module-level context matters; symbol-level views are an optimization, not a rule.
 
-Need to rename across codebase?
-  └─> Use serena rename_symbol
+### 2. Assess Impact
 
-Need to check impact of changes?
-  └─> Use codegraph_impact
-```
+- Find relevant callers, references, tests, configuration, and public contracts.
+- Use multiple sources of evidence for cross-module or high-risk changes.
+- Do not treat a clean reference search as proof that runtime or external consumers do not exist.
 
-## Best Practices
+### 3. Edit
 
-- codegraph queries are sub-millisecond - use liberally
-- Batch serena operations when possible
-- Cache context7 documentation lookups
-- Minimize full file reads - use symbol-level tools instead
-- Save important patterns and decisions to memory
-- Document architectural decisions and user preferences
+- Choose semantic editing for broad symbol-aware changes and patches for focused textual changes.
+- Keep edits within the requested scope.
+- Review each tool-generated change before proceeding.
+
+### 4. Verify
+
+- Run the narrowest relevant unit tests, integration tests, type checks, lint checks, or build commands.
+- For UI changes, add browser or screenshot verification when visual or interaction behavior is involved.
+- Inspect the final diff for accidental edits, missed references, and generated noise.
+- Report tool failures and any verification that could not be completed.
+
+## Fallback Order
+
+When a preferred MCP tool is unavailable or unreliable:
+
+1. Use repository search and direct file reads.
+2. Use the project's language tooling, package metadata, and test commands.
+3. Use official or primary documentation through an available documentation or web tool.
+4. Ask the user only when missing information would materially change the implementation and cannot be discovered safely.
+
+Tool choice supports engineering judgment; it does not replace it.
