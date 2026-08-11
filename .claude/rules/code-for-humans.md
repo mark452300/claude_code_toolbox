@@ -35,6 +35,7 @@ Do not sacrifice a higher-priority goal for a lower-priority one.
 - Change only what is needed to satisfy the request.
 - Prefer modifying the existing implementation over creating a parallel path.
 - Fix the underlying cause, not only the observed example, while keeping the change within scope.
+- Minimize change surface as well as code size. When behavior can be implemented cohesively through an existing extension point, keep it localized and avoid scattering edits across callers, layers, clients, or stable core modules without a demonstrated need.
 - Do not refactor, rename, reformat, or clean up unrelated code.
 - Preserve backward compatibility only when the project or request requires it.
 - Mention broader issues separately instead of silently expanding the task.
