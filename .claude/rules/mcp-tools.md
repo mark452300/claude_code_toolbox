@@ -1,7 +1,3 @@
----
-when: [writing_code, reviewing_code, using_mcp_tools]
----
-
 # MCP Tool Usage
 
 Use tools to reduce uncertainty and verify results. Choose the smallest set of available tools that can complete the task reliably.
