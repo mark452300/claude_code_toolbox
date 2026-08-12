@@ -28,9 +28,11 @@ Do not sacrifice a higher-priority goal for a lower-priority one.
 
 ### 2. Make the Smallest Complete Change
 
+- Before adding code, check in order whether the requested outcome can be achieved by doing nothing, deleting code, reusing an existing implementation, using the standard library or platform, or using an already-installed dependency. Write new code only when the earlier options do not fully satisfy the requirement.
 - Change only what is needed to satisfy the request.
 - Prefer modifying the existing implementation over creating a parallel path.
-- Fix the underlying cause, not only the observed example, while keeping the change within scope.
+- Fix the underlying cause, not only the observed example, while keeping the change within scope. When behavior has a shared owner, fix it there instead of patching individual callers.
+- The smallest change means the smallest coherent change in the correct place, not merely the fewest edited lines.
 - Minimize change surface as well as code size. When behavior can be implemented cohesively through an existing extension point, keep it localized and avoid scattering edits across callers, layers, clients, or stable core modules without a demonstrated need.
 - Do not refactor, rename, reformat, or clean up unrelated code.
 - Preserve backward compatibility only when the project or request requires it.
@@ -44,6 +46,7 @@ Do not sacrifice a higher-priority goal for a lower-priority one.
 - Do not add speculative helpers, wrappers, factories, strategy layers, configuration systems, feature flags, fallbacks, or compatibility layers.
 - Do not add defensive checks for states already made impossible by trusted types, schemas, or validated boundaries.
 - Do not add a dependency when the project already has a suitable solution.
+- When deliberately choosing a simple implementation with a non-obvious scale, performance, or concurrency limit, document the limit and the condition that would justify a more complex solution.
 
 ### 4. Write for the Next Reader
 
@@ -112,6 +115,7 @@ Before finishing, confirm:
 - [ ] The requested behavior is fully implemented.
 - [ ] The change stays within scope and preserves existing contracts.
 - [ ] Existing code and interfaces were reused where appropriate.
+- [ ] New code was added only after simpler options were ruled out.
 - [ ] No speculative abstraction, compatibility code, fallback, dependency, or configuration was added.
 - [ ] Names, control flow, comments, and module boundaries are easy to understand.
 - [ ] Relevant verification passed, or missing verification is clearly reported.
