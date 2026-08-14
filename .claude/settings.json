@@ -58,6 +58,8 @@
     "claude-mem@thedotmack": true,
     "understand-anything@understand-anything": true,
     "superpowers@superpowers-marketplace": true,
-    "claude-hud@claude-hud": true
+    "claude-hud@claude-hud": true,
+    "mattpocock-skills@mattpocock": true,
+    "ecc@ecc": true
   }
 }

@@ -47,6 +47,14 @@
                 "serve",
                 "--mcp"
             ]
+        },
+        "prompts.chat": {
+            "command": "npx",
+            "args": [
+                "-y",
+                "prompts.chat",
+                "mcp"
+            ]
         }
     }
 }
