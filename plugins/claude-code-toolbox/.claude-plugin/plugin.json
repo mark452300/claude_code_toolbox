@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "claude-code-toolbox",
+  "displayName": "Claude Code Toolbox",
+  "version": "1.0.1",
+  "description": "Reusable Claude Code skills, agents, Serena hooks, and MCP integrations.",
+  "author": {
+    "name": "lemon Alpha",
+    "url": "https://github.com/mark452300"
+  },
+  "homepage": "https://github.com/mark452300/claude_code_toolbox#readme",
+  "repository": "https://github.com/mark452300/claude_code_toolbox",
+  "license": "Apache-2.0",
+  "keywords": [
+    "developer-tools",
+    "frontend",
+    "architecture",
+    "mcp"
+  ],
+  "userConfig": {
+    "mysql_host": {
+      "type": "string",
+      "title": "MySQL host",
+      "description": "Host name used by the bundled toolbox-mysql MCP server.",
+      "default": "localhost"
+    },
+    "mysql_port": {
+      "type": "string",
+      "title": "MySQL port",
+      "description": "Port used by the bundled toolbox-mysql MCP server.",
+      "default": "3306"
+    },
+    "mysql_user": {
+      "type": "string",
+      "title": "MySQL user",
+      "description": "User name used by the bundled toolbox-mysql MCP server.",
+      "default": "root"
+    },
+    "mysql_password": {
+      "type": "string",
+      "title": "MySQL password",
+      "description": "Password used by the bundled toolbox-mysql MCP server.",
+      "sensitive": true,
+      "required": true
+    },
+    "mysql_database": {
+      "type": "string",
+      "title": "MySQL database",
+      "description": "Database name used by the bundled toolbox-mysql MCP server.",
+      "required": true
+    },
+    "context7_api_key": {
+      "type": "string",
+      "title": "Context7 API key",
+      "description": "API key for the bundled Context7 MCP server.",
+      "sensitive": true,
+      "required": true
+    }
+  }
+}

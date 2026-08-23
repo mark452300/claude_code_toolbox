@@ -1,15 +1,32 @@
 {
+  "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
   "name": "mark452300",
   "owner": {
-    "name": "lemon Alpha"
+    "name": "lemon Alpha",
+    "url": "https://github.com/mark452300"
   },
-  "description": "Claude Code marketplace for lemon Alpha's shared project config bundles and tools.",
+  "description": "Claude Code marketplace for reusable development tools and workflows.",
   "plugins": [
     {
       "name": "claude-code-toolbox",
-      "version": "1.0.0",
-      "description": "Claude Code project config bundle with .claude settings, skills, rules, and MCP setup",
-      "source": "./"
+      "displayName": "Claude Code Toolbox",
+      "source": "./plugins/claude-code-toolbox",
+      "description": "Reusable Claude Code skills, agents, Serena hooks, and MCP integrations.",
+      "author": {
+        "name": "lemon Alpha",
+        "url": "https://github.com/mark452300"
+      },
+      "homepage": "https://github.com/mark452300/claude_code_toolbox#readme",
+      "repository": "https://github.com/mark452300/claude_code_toolbox",
+      "license": "Apache-2.0",
+      "category": "development",
+      "tags": [
+        "developer-tools",
+        "skills",
+        "agents",
+        "hooks",
+        "mcp"
+      ]
     }
   ]
 }

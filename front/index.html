@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Runwai 数字人前端演示页" />
+    <title>Runwai 数字人</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Noto+Serif+SC:wght@500;600;700&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="./styles.css" />
+</head>
+
+<body>
+    <div class="grain"></div>
+    <main class="page-shell">
+        <section class="hero">
+            <header class="topbar">
+                <div class="brand">
+                    <span class="brand-mark"></span>
+                    <div>
+                        <p>Runwai Digital Human</p>
+                        <span>Editorial AI avatar front-end</span>
+                    </div>
+                </div>
+                <nav class="topnav">
+                    <a href="#features">能力</a>
+                    <a href="#studio">演示</a>
+                    <a href="#contact">联系</a>
+                </nav>
+            </header>
+
+            <div class="hero-grid">
+                <div class="hero-copy reveal">
+                    <p class="eyebrow">DIGITAL HUMAN / REAL-TIME / EMOTIVE</p>
+                    <h1>让数字人像一位被精心拍摄过的主持人，而不是一个模板化的机器人。</h1>
+                    <p class="lede">
+                        这是一个偏电影感、黑白编辑风的数字人前端首页，突出人物感、表达力和可信的科技气质。
+                    </p>
+                    <div class="hero-actions">
+                        <button class="button button-primary" id="startDemo">启动体验</button>
+                        <button class="button button-secondary" id="changeMood">切换状态</button>
+                    </div>
+                    <dl class="stats">
+                        <div>
+                            <dt>响应延迟</dt>
+                            <dd><span id="latency">0.38</span>s</dd>
+                        </div>
+                        <div>
+                            <dt>语气模式</dt>
+                            <dd id="tone">温和专业</dd>
+                        </div>
+                        <div>
+                            <dt>镜头状态</dt>
+                            <dd id="cameraState">稳定跟拍</dd>
+                        </div>
+                    </dl>
+                </div>
+
+                <div class="avatar-stage reveal">
+                    <div class="stage-card">
+                        <div class="stage-light"></div>
+                        <div class="avatar" aria-label="数字人形象">
+                            <div class="avatar-halo"></div>
+                            <div class="avatar-head"></div>
+                            <div class="avatar-face"></div>
+                            <div class="avatar-body"></div>
+                            <div class="avatar-base"></div>
+                        </div>
+                        <div class="floating-chip chip-a">LIVE VOICE</div>
+                        <div class="floating-chip chip-b">AVATAR SYNC</div>
+                        <div class="floating-chip chip-c">SCENE AWARE</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="strip reveal">
+            <div>
+                <span>01</span>
+                <strong>自然表情</strong>
+                <p>强调微表情、注视和停顿，让数字人更像真实沟通者。</p>
+            </div>
+            <div>
+                <span>02</span>
+                <strong>高质感画面</strong>
+                <p>黑白编辑风、胶片颗粒和柔和高光，建立高端科技氛围。</p>
+            </div>
+            <div>
+                <span>03</span>
+                <strong>内容驱动</strong>
+                <p>支持介绍、讲解、问答和引导转化的内容结构。</p>
+            </div>
+        </section>
+
+        <section class="features" id="features">
+            <div class="section-head reveal">
+                <p class="eyebrow">FEATURES</p>
+                <h2>用编辑出版物的方式组织 AI 产品页面。</h2>
+            </div>
+            <div class="feature-grid">
+                <article class="feature-card reveal">
+                    <h3>镜头语言</h3>
+                    <p>通过光影、留白、层次和固定构图，让页面像一场精心安排的访谈。</p>
+                </article>
+                <article class="feature-card reveal">
+                    <h3>状态系统</h3>
+                    <p>空闲、发言、思考、邀请互动四种状态，配合按钮实时切换。</p>
+                </article>
+                <article class="feature-card reveal">
+                    <h3>可信表达</h3>
+                    <p>视觉不夸张，信息更克制，适合展示企业级数字人、客服或品牌代言场景。</p>
+                </article>
+            </div>
+        </section>
+
+        <section class="studio" id="studio">
+            <div class="section-head reveal">
+                <p class="eyebrow">STUDIO</p>
+                <h2>演示面板</h2>
+            </div>
+            <div class="studio-panel reveal">
+                <div class="studio-left">
+                    <p class="panel-label">当前脚本</p>
+                    <h3 id="scriptTitle">欢迎来到 Runwai 数字人演示</h3>
+                    <p id="scriptText">我会以更自然的方式介绍产品能力、引导用户理解价值，并保持一种清晰、冷静的表达节奏。</p>
+                    <ul class="bullet-list">
+                        <li>支持品牌介绍</li>
+                        <li>支持产品讲解</li>
+                        <li>支持转化引导</li>
+                    </ul>
+                </div>
+                <div class="studio-right">
+                    <div class="speech-card">
+                        <span>NOW PLAYING</span>
+                        <strong id="speechState">稳定输出</strong>
+                    </div>
+                    <div class="meter">
+                        <div class="meter-bar" id="meterBar"></div>
+                    </div>
+                    <p class="hint">通过按钮切换数字人状态，观察文案、镜头和能量条变化。</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="contact" id="contact">
+            <div class="contact-box reveal">
+                <p class="eyebrow">CONTACT</p>
+                <h2>准备把它接到你的数字人项目里。</h2>
+                <p>如果你后面要接入视频、语音合成、WebRTC 或后台接口，这个页面可以直接作为视觉骨架继续扩展。</p>
+                <a class="button button-primary link-button" href="mailto:hello@example.com">开始下一步</a>
+            </div>
+        </section>
+    </main>
+
+    <script src="./app.js"></script>
+</body>
+
+</html>
