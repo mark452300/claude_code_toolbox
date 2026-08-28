@@ -10,6 +10,7 @@
     "skipDangerousModePermissionPrompt": true
   },
   "enableAllProjectMcpServers": true,
+  "skipDangerousModePermissionPrompt": true,
   "hooks": {
     "PreToolUse": [
       {
