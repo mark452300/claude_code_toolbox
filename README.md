@@ -5,9 +5,9 @@
 **Claude Code 项目配置工具箱**
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE.txt)
-[![Version](https://img.shields.io/badge/version-1.0.1-green.svg)](plugins/claude-code-toolbox/.claude-plugin/plugin.json)
+![Version](https://img.shields.io/badge/version-1.0.1-green.svg)
 
-一套面向 Claude Code 的项目级配置集合与可安装插件，包含 rules、skills、agents、hooks、MCP 服务器配置、`DESIGN.md` 设计规范，以及用于同步配置的安装脚本。
+一套面向 Claude Code 的项目级配置集合，包含 rules、skills、agents、hooks、MCP 服务器配置、`DESIGN.md` 设计规范，以及用于同步配置的安装脚本。
 
 [English](#english) | [中文](#中文)
 
@@ -25,28 +25,18 @@
 - 常用 MCP 服务器配置模板
 - `DESIGN.md` 设计系统文档（项目级 `design.md` 约定）
 - 用于同步这些配置的 `install.sh`
-- Claude Code marketplace 元数据和 `plugins/claude-code-toolbox/` 可安装插件
 
 适合的使用方式是：把这个仓库作为你的 Claude Code 配置源，然后同步到具体项目里使用。
 
 ### 快速安装
 
-####方式一：插件市场安装
-
-```bash
-/plugin marketplace add mark452300/claude_code_toolbox
-/plugin install claude-code-toolbox@mark452300
-```
-
-插件安装会提供 skills、agent、Serena hooks 和 MCP servers。它不会写入项目级 `.claude/rules/`、权限设置或 `enabledPlugins`；如需完整同步项目配置，请使用 `install.sh`。
-
-####方式二：克隆仓库
+####方式一：克隆仓库
 
 ```bash
 git clone https://github.com/mark452300/claude_code_toolbox.git
 ```
 
-####方式三：同步到当前项目
+####方式二：同步到当前项目
 
 `install.sh`适合在你的业务项目根目录执行。脚本会从远端拉取本仓库最新内容，并把配置同步到当前目录。
 
@@ -118,18 +108,7 @@ your-project/
 - `codegraph`：代码图谱与索引查询
 - `prompts.chat`：提示词搜索与 MCP 接入
 
-####3. 可安装插件
-
-- `.claude-plugin/marketplace.json`：marketplace 清单
-- `plugins/claude-code-toolbox/.claude-plugin/plugin.json`：插件清单
-- `plugins/claude-code-toolbox/skills/`：可自动发现的 skills
-- `plugins/claude-code-toolbox/agents/`：可自动发现的 agent
-- `plugins/claude-code-toolbox/hooks/hooks.json`：Serena hooks
-- `plugins/claude-code-toolbox/.mcp.json`：插件 MCP servers
-
-插件版 MCP 配置使用 Claude Code `userConfig` 安全保存 MySQL 和 Context7 凭据，并使用 `${CLAUDE_PROJECT_DIR}` 自动定位当前项目。根目录 `.mcp.json` 仍是供 `install.sh` 同步后手动编辑的项目模板。
-
-#### 4. `DESIGN.md` 设计规范
+####3. `DESIGN.md` 设计规范
 
 仓库根目录的 `DESIGN.md` 是本项目采用的设计系统文档，用适合人类和 AI 工具读取的 Markdown 格式集中记录颜色、字体、间距、圆角、组件、响应式行为以及设计约束，使 Claude Code 等编码工具在生成或修改界面时能够遵循一致的视觉语言。
 
@@ -284,18 +263,6 @@ claude_code_toolbox/
 │ │ └── karpathy-guidelines/
 │ │ └── SKILL.md
 │ └── settings.json
-├── .claude-plugin/
-│ └── marketplace.json
-├── plugins/
-│ └── claude-code-toolbox/
-│ ├── .claude-plugin/
-│ │ └── plugin.json
-│ ├── agents/
-│ ├── hooks/
-│ │ └── hooks.json
-│ ├── skills/
-│ ├── .mcp.json
-│ └── LICENSE.txt
 ├── .mcp.json
 ├── install.sh
 └── README.md
@@ -333,8 +300,6 @@ claude_code_toolbox/
 #### 添加新的 Skill
 
 1. 在 `.claude/skills/` 下创建新目录并新增 `SKILL.md`
-2. 将同一个 skill 同步到 `plugins/claude-code-toolbox/skills/`
-3. 运行 `claude plugin validate plugins/claude-code-toolbox --strict`
 
 #### 添加新的 Rule
 
@@ -352,13 +317,6 @@ paths:
 规则内容...
 ```
 
-#### 更新插件元数据
-
-如果你新增了插件组件或调整安装方式，记得同步更新：
-
-- `.claude-plugin/marketplace.json`
-- `plugins/claude-code-toolbox/.claude-plugin/plugin.json`
-
 ---
 
 ## English
@@ -370,19 +328,8 @@ This repository provides a reusable Claude Code project configuration bundle, in
 - project-level `.claude/` rules, skills, agents, hooks, and settings
 - a ready-to-edit `.mcp.json` template
 - `install.sh` for syncing the configuration into another project
-- a marketplace catalog under `.claude-plugin/`
-- an installable plugin under `plugins/claude-code-toolbox/`
 
 ### Quick Start
-
-#### Install from marketplace
-
-```bash
-/plugin marketplace add mark452300/claude_code_toolbox
-/plugin install claude-code-toolbox@mark452300
-```
-
-The plugin installs skills, an agent, Serena hooks, and MCP servers. It does not distribute project rules, permissions, or `enabledPlugins`; use `install.sh` when you want the complete project configuration.
 
 #### Clone the repository
 
@@ -435,8 +382,6 @@ After syncing, update placeholder values in `.mcp.json`, especially:
 - Serena `--project` path
 
 You may also need to adjust `.claude/settings.json` if your local environment does not use the same plugins or hooks.
-
-Marketplace installs prompt for MySQL and Context7 credentials through Claude Code `userConfig`; Serena automatically receives the current `${CLAUDE_PROJECT_DIR}`. The root `.mcp.json` remains a manually editable template for `install.sh` users.
 
 ---
 

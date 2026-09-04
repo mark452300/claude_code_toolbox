@@ -29,3 +29,4 @@ settings.local.json
 .codegraph
 .understand-anything
 .claude/worktrees/
+.claude-plugin/
