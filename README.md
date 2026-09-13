@@ -17,11 +17,13 @@
 
 ## 中文
 
-###这是什么
+### 这是什么
 
 这个仓库提供一套可以直接复用到业务项目里的 Claude Code 基础配置，主要包含：
 
 - 项目级 `.claude/` 配置
+- Spec Kit 安装与初始化说明
+- Headroom 可选接入说明：压缩上下文与工具输出
 - 常用 MCP 服务器配置模板
 - `DESIGN.md` 设计系统文档（项目级 `design.md` 约定）
 - 用于同步这些配置的 `install.sh`
@@ -30,13 +32,13 @@
 
 ### 快速安装
 
-####方式一：克隆仓库
+#### 方式一：克隆仓库
 
 ```bash
 git clone https://github.com/mark452300/claude_code_toolbox.git
 ```
 
-####方式二：同步到当前项目
+#### 方式二：同步到当前项目
 
 `install.sh`适合在你的业务项目根目录执行。脚本会从远端拉取本仓库最新内容，并把配置同步到当前目录。
 
@@ -85,19 +87,19 @@ your-project/
 
 ### 当前包含的内容
 
-####1. `.claude/`
+#### 1. `.claude/`
 
 当前仓库实际提供：
 
 - `rules/`
- - `code-for-humans.md`
+ - `code-for-humans-v11.md`
  - `mcp-tools.md`
 - `skills/`
  - `frontend-design`
  - `karpathy-guidelines`
 - `settings.json`
 
-####2. MCP服务器配置
+#### 2. MCP服务器配置
 
 当前 `.mcp.json` 内置了6 个 MCP Server：
 
@@ -108,11 +110,61 @@ your-project/
 - `codegraph`：代码图谱与索引查询
 - `prompts.chat`：提示词搜索与 MCP 接入
 
-####3. `DESIGN.md` 设计规范
+#### 3. `DESIGN.md` 设计规范
 
 仓库根目录的 `DESIGN.md` 是本项目采用的设计系统文档，用适合人类和 AI 工具读取的 Markdown 格式集中记录颜色、字体、间距、圆角、组件、响应式行为以及设计约束，使 Claude Code 等编码工具在生成或修改界面时能够遵循一致的视觉语言。
 
 本仓库的 `DESIGN.md` 当前定义了 Runwai 风格的单色编辑设计系统，并作为 `front/` 示例页面的设计依据。这里的 `design.md` 是项目约定的文档格式，不应表述为 Google 官方标准、浏览器标准或 W3C 标准。仓库目前没有绑定 Google 官方的 `design.md` 规范或校验器；如需引入外部设计规范，应在确认其官方来源后再补充链接和校验命令。
+
+### Spec Kit 安装与初始化
+
+需要使用 Spec Kit 时，请先安装 `uv`，然后在自己的项目根目录执行以下命令，按项目需要自行设置：
+
+```bash
+uv tool install specify-cli
+specify init --here --force --integration claude
+```
+
+Spec Kit 生成的配置和工作流由目标项目自行维护，不随本工具箱分发。
+
+### Headroom 上下文压缩（可选）
+
+[Headroom](https://github.com/headroomlabs-ai/headroom) 可在内容送入模型前，本地压缩工具输出、日志、文件和检索结果，并通过 CCR 缓存原文以供按需取回。它提供代理、库和 MCP 接入方式。压缩效果取决于输入内容，应以实际会话统计为准。
+
+本工具箱目前提供接入说明；`install.sh` 不会安装 Headroom，`.mcp.json` 也未预置 Headroom 服务。
+
+#### 在 Claude Code 中使用
+
+已安装 `uv` 和 Claude Code 后，在终端安装 Headroom CLI：
+
+```powershell
+uv tool install --python 3.13 "headroom-ai[all]"
+```
+
+在目标项目根目录启动会话。本仓库已经配置 Serena，示例跳过 Headroom 自动安装 Serena 的步骤：
+
+```powershell
+headroom wrap claude --code-memory none
+```
+
+每次需要通过 Headroom 使用 Claude Code 时，都通过上述命令启动。启动后可在另一终端检查路由及统计：
+
+```powershell
+headroom doctor
+headroom perf
+```
+
+如需撤销持久化的接入配置：
+
+```powershell
+headroom unwrap claude
+```
+
+#### 与 Spec Kit 配合
+
+在目标项目中初始化 Spec Kit 后，可通过 Headroom 启动 Claude Code，使用初始化生成的 Spec Kit 命令。Spec Kit 负责需求、方案和任务组织，Headroom 负责模型请求中的上下文压缩，`DESIGN.md` 继续作为界面设计依据。
+
+安装与命令说明见 [Headroom 官方 README](https://github.com/headroomlabs-ai/headroom#get-started-60-seconds) 和 [官方文档](https://docs.headroomlabs.ai/)。
 
 ### 配置说明
 
@@ -252,18 +304,13 @@ your-project/
 ```text
 claude_code_toolbox/
 ├── .claude/
-│ ├── agents/
-│ │ └── engineering-software-architect.md
-│ ├── rules/
-│ │ ├── code-for-humans.md
-│ │ └── mcp-tools.md
-│ ├── skills/
-│ │ ├── frontend-design/
-│ │ │ └── SKILL.md
-│ │ └── karpathy-guidelines/
-│ │ └── SKILL.md
-│ └── settings.json
+│   ├── agents/                  # design/、engineering/
+│   ├── rules/                   # code-for-humans-v11.md 等
+│   ├── skills/                  # frontend-design、karpathy-guidelines
+│   └── settings.json
 ├── .mcp.json
+├── front/
+├── DESIGN.md
 ├── install.sh
 └── README.md
 ```
@@ -295,7 +342,7 @@ claude_code_toolbox/
 用 prompts.chat 搜一个适合前端调试的 prompt
 ```
 
-###维护说明
+### 维护说明
 
 #### 添加新的 Skill
 
@@ -326,6 +373,7 @@ paths:
 This repository provides a reusable Claude Code project configuration bundle, including:
 
 - project-level `.claude/` rules, skills, agents, hooks, and settings
+- instructions for installing and initializing Spec Kit in your own project
 - a ready-to-edit `.mcp.json` template
 - `install.sh` for syncing the configuration into another project
 
@@ -357,7 +405,7 @@ This repository also includes `DESIGN.md`, a project-level design-system documen
 `DESIGN.md` is a project convention in this repository. It should not be described as an official Google, browser, or W3C standard. This repository does not currently depend on an officially published Google `design.md` specification or validator. Any external specification or validation command should be added only after its official source has been verified.
 
 - `rules/`
- - `code-for-humans.md`
+ - `code-for-humans-v11.md`
  - `mcp-tools.md`
 - `skills/`
  - `frontend-design`
@@ -372,6 +420,30 @@ This repository also includes `DESIGN.md`, a project-level design-system documen
 - `serena`
 - `codegraph`
 - `prompts.chat`
+
+### Spec Kit
+
+With `uv` installed, run these commands from your own project root, then configure Spec Kit for that project:
+
+```bash
+uv tool install specify-cli
+specify init --here --force --integration claude
+```
+
+Generated Spec Kit configuration and workflows are maintained by the target project and are not distributed with this toolbox.
+
+### Headroom (optional)
+
+[Headroom](https://github.com/headroomlabs-ai/headroom) compresses context locally before it reaches the model. This toolbox documents the integration; the installer does not install Headroom or configure its MCP server.
+
+With uv and Claude Code available, install and launch from your project directory:
+
+```powershell
+uv tool install --python 3.13 "headroom-ai[all]"
+headroom wrap claude --code-memory none
+```
+
+The flag skips automatic Serena setup because this toolbox already configures Serena. Launch each wrapped session this way, then use the Spec Kit commands generated by initialization in your project. Run `headroom doctor` and `headroom perf` in another terminal to check routing and statistics; use `headroom unwrap claude` to undo persistent wrapping configuration. See the [official documentation](https://docs.headroomlabs.ai/) for details.
 
 ### Notes
 

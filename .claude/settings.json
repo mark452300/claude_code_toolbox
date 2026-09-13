@@ -61,6 +61,7 @@
     "claude-hud@claude-hud": true,
     "mattpocock-skills@mattpocock": true,
     "ecc@ecc": true,
-    "i-have-adhd@i-have-adhd": true
+    "i-have-adhd@i-have-adhd": true,
+    "context-mode@context-mode": true
   }
 }

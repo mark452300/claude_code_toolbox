@@ -30,3 +30,7 @@ settings.local.json
 .understand-anything
 .claude/worktrees/
 .claude-plugin/
+
+# Local Spec Kit setup; initialize separately in each target project
+.specify/
+.claude/skills/speckit-*/
