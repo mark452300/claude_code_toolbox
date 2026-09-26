@@ -62,6 +62,7 @@
     "mattpocock-skills@mattpocock": true,
     "ecc@ecc": true,
     "i-have-adhd@i-have-adhd": true,
-    "context-mode@context-mode": true
+    "context-mode@context-mode": true,
+    "drawio@drawio": true
   }
 }
